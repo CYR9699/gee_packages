@@ -3,8 +3,6 @@ var pkg_export = {};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // var pkg_export = require('users/kongdd/public:pkg_export.js');
 
-
-
 /**
  * Clip image data of points buffer
  *
@@ -227,7 +225,7 @@ pkg_export.getProj = function(img){
 
 
 /**
- * ExportImage_deg
+ * ExportImg
  *
  * @param {ee.Image} Image     The image to export.
  * @param {String} task      The file name of exported image
@@ -242,9 +240,9 @@ pkg_export.getProj = function(img){
  * Requires "crs" to be defined.
  * 
  * @example
- * ExportImg_deg(Image, task, range, cellsize, type, folder, crs, crs_trans)
+ * ExportImg(Image, task, range, cellsize, type, folder, crs, crs_trans)
  */
-pkg_export.ExportImg_deg = function(Image, task, range, cellsize, type, folder, crs, crsTransform){
+pkg_export.ExportImg = function(Image, task, range, cellsize, type, folder, crs, crsTransform){
     var bounds; // define export region
 
     range  = range  || [-180, -60, 180, 90];
@@ -252,7 +250,7 @@ pkg_export.ExportImg_deg = function(Image, task, range, cellsize, type, folder, 
     folder = folder || "";
     crs    = crs    || 'SR-ORG:6974';
 
-    if (typeof crsTransform === 'undefined'){
+    if (crsTransform === undefined){
         bounds = ee.Geometry.Rectangle(range, 'EPSG:4326', false); //[xmin, ymin, xmax, ymax]
     }
 
@@ -263,7 +261,7 @@ pkg_export.ExportImg_deg = function(Image, task, range, cellsize, type, folder, 
         crs          : crs,
         crsTransform : crsTransform,
         region       : bounds,
-        dimensions   : getDimensions(range, cellsize),
+        dimensions   : pkg_export.getDimensions(range, cellsize),
         maxPixels    : 1e13
     };
 
@@ -328,7 +326,7 @@ pkg_export.ExportImgCol = function(ImgCol, dateList, range, cellsize, type,
         // var task = img.get('system:id');//.getInfo();
         var task = prefix + date;
         print(task);
-        pkg_export.ExportImg_deg(img, task, range, cellsize, type, folder, crs, crsTransform); 
+        pkg_export.ExportImg(img, task, range, cellsize, type, folder, crs, crsTransform); 
     }
 };
 
